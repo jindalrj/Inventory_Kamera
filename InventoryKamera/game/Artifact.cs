@@ -124,7 +124,14 @@ namespace InventoryKamera
 			[DefaultValue(-1)]
 			public decimal value;
 
-			public override string ToString()
+            // Adding a constructor to initialize the struct
+            public SubStat(string stat, decimal value)
+            {
+                this.stat = stat;
+                this.value = value;
+            }
+
+            public override string ToString()
 			{
 				return stat is null
 					? "NULL"
@@ -132,7 +139,32 @@ namespace InventoryKamera
 			}
 		}
 
-		public override bool Equals(object obj) => this.Equals(obj as Artifact);
+        public bool IsSameAs(Artifact artifact)
+        {
+            if (artifact is null)
+            {
+                return false;
+            }
+
+            if (Object.ReferenceEquals(this, artifact))
+            {
+                return true;
+            }
+
+            if (GetType() != artifact.GetType())
+            {
+                return false;
+            }
+
+            return GearSlot == artifact.GearSlot
+                && Rarity == artifact.Rarity
+                && MainStat == artifact.MainStat
+                && Level == artifact.Level
+                && SubStats.ToHashSet().SetEquals(artifact.SubStats.ToHashSet())
+                && SetName == artifact.SetName;
+        }
+
+        public override bool Equals(object obj) => this.Equals(obj as Artifact);
 
 		public bool Equals(Artifact artifact)
 		{

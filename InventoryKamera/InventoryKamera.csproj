@@ -133,6 +133,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="automate\ArtifactLocker.cs" />
     <Compile Include="game\Artifact.cs" />
     <Compile Include="Properties\JsonUserSettingsProvider.cs" />
     <Compile Include="scraping\ArtifactScraper.cs" />

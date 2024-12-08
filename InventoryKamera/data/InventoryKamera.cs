@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using InventoryKamera.automate;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,7 +30,9 @@ namespace InventoryKamera
 		private ArtifactScraper artifactScraper;
 		private MaterialScraper materialScraper;
 
-		private volatile bool b_threadCancel;
+		private ArtifactLocker artifactLocker;
+
+        private volatile bool b_threadCancel;
 		private readonly int NumWorkers;
 
 		public bool HasData
@@ -49,6 +52,8 @@ namespace InventoryKamera
 			weaponScraper = new WeaponScraper();
 			artifactScraper = new ArtifactScraper();
 			materialScraper = new MaterialScraper();
+
+			artifactLocker = new ArtifactLocker();
 
 			b_threadCancel = false;
 
@@ -145,7 +150,7 @@ namespace InventoryKamera
 				Navigation.SelectArtifactInventory();
 				try
 				{
-					artifactScraper.ScanArtifacts();
+					artifactLocker.SyncArtifactLocks();
 				}
 				catch (FormatException ex) { UserInterface.AddError(ex.Message); }
 				catch (ThreadAbortException) { }
